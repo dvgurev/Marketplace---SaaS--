@@ -7,6 +7,52 @@
 > (аналог Docker). Файлы `docker-compose.yml` и `server/Dockerfile`
 > предназначены для запуска через `podman-compose`.
 
+## Quick Start (Developer)
+
+Краткая инструкция для быстрой локальной разработки без Docker/Podman.
+
+Вариант A — быстро (SQLite, рекомендуется для прототипа):
+
+```bash
+cd server
+npm install
+# создайте .env с переменными (пример ниже)
+cat > .env <<'EOF'
+DATABASE_PROVIDER=sqlite
+DATABASE_URL="file:./dev.db"
+JWT_SECRET="change_this_secret"
+PORT=5000
+EOF
+
+npm run prisma:generate
+npx prisma db push
+npm run dev
+```
+
+Вариант B — полноценно (PostgreSQL):
+
+1. Установите PostgreSQL (или используйте managed DB).
+2. Создайте пользователя и базу, затем настройте `DATABASE_URL` в `.env`.
+
+Пример (Ubuntu):
+```bash
+sudo apt update && sudo apt install -y postgresql
+sudo -u postgres createuser -P marketplace_user
+sudo -u postgres createdb -O marketplace_user marketplace_db
+# в server/.env: DATABASE_PROVIDER=postgresql
+# DATABASE_URL="postgresql://marketplace_user:password@localhost:5432/marketplace_db?schema=public"
+cd server
+npm install
+npm run prisma:generate
+npx prisma migrate dev
+npm run dev
+```
+
+Примечания:
+- Для тестов и простого локального прототипа используйте SQLite.
+- Для интеграционных тестов и продакшена используйте PostgreSQL и миграции.
+
+
 ## Содержание
 1. [Общие положения](#1-общие-положения)
 2. [Описание проекта](#2-описание-проекта)
