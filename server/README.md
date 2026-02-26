@@ -53,6 +53,9 @@ npm run dev            # в режиме разработки
 npm run build && npm start  # production
 ```
 
+> Контейнеры для сервера и базы можно запустить через Podman/Podman-compose
+> из корня проекта (см. `../docker-compose.yml`).
+
 ### Миграции
 
 Применяйте файл `migrations/001_initial.sql` к вашей БД вручную или через `prisma`:

@@ -3,6 +3,10 @@
 **Версия документа:** 1.0  
 **Дата:** 26.02.2025
 
+> В репозитории также настроено локальное окружение с помощью Podman
+> (аналог Docker). Файлы `docker-compose.yml` и `server/Dockerfile`
+> предназначены для запуска через `podman-compose`.
+
 ## Содержание
 1. [Общие положения](#1-общие-положения)
 2. [Описание проекта](#2-описание-проекта)
@@ -740,6 +744,23 @@
 
 
 
+
+## Локальный запуск (Podman)
+
+Используйте Podman вместо Docker, команды остаются почти идентичными:
+
+```bash
+# убедитесь, что установлен podman и podman-compose
+cp .env.example .env             # скорректируйте значения
+podman-compose up --build -d      # поднимет Postgres + оркестратор
+# посмотреть логи
+podman-compose logs -f orchestrator
+# остановка
+podman-compose down
+```
+
+`docker-compose` тоже работает, но мы ориентируемся на podman для
+rootless-режима и совместимости с RHEL/AlmaLinux.
 
 # Ссылки
  1. https://clck.ru/3S42yv
