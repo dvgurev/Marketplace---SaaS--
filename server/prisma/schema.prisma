@@ -2,7 +2,8 @@
 // Mirrors the PostgreSQL tables defined in the project README
 
 datasource db {
-  provider = "postgresql"
+  // provider can be overridden by setting DATABASE_PROVIDER env var (sqlite or postgresql)
+  provider = env("DATABASE_PROVIDER")
   url      = env("DATABASE_URL")
 }
 

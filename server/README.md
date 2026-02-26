@@ -27,10 +27,27 @@ server/
 
 ```
 cd server
-# настройка env-файла .env
-npm install / go build
-npm start / ./server
+# настроить переменные окружения, например скопировать .env.example в .env
+# основной параметр DATABASE_URL должен указывать на Postgres (или sqlite при
+# разработке с небольшими изменениями schemas)
+npm install
+npm run dev            # в режиме разработки
+npm run build && npm start  # production
 ```
+
+### Миграции
+
+Применяйте файл `migrations/001_initial.sql` к вашей БД вручную или через `prisma`:
+
+```bash
+# если используется PostgreSQL и DATABASE_URL настроен
+npx prisma migrate deploy
+# (или) npx prisma db push --preview-feature
+```
+
+Для локального простого прототипа можно временно изменить схему Prisma на
+`provider = "sqlite"` и задать `DATABASE_URL="file:./dev.db"`.
+
 
 ## Тесты
 
