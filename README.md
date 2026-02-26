@@ -747,20 +747,24 @@
 
 ## Локальный запуск (Podman)
 
-Используйте Podman вместо Docker, команды остаются почти идентичными:
+Используйте Podman вместо Docker, команды остаются почти идентичными.
+Если у вас нет `podman-compose`, установите его через `pip`:
 
 ```bash
-# убедитесь, что установлен podman и podman-compose
-cp .env.example .env             # скорректируйте значения
-podman-compose up --build -d      # поднимет Postgres + оркестратор
-# посмотреть логи
-podman-compose logs -f orchestrator
-# остановка
-podman-compose down
+pip install podman-compose
 ```
 
-`docker-compose` тоже работает, но мы ориентируемся на podman для
-rootless-режима и совместимости с RHEL/AlmaLinux.
+или воспользуйтесь встроенным Makefile:
+
+```bash
+cp .env.example .env             # скорректируйте значения
+make up                          # поднимет Postgres + оркестратор
+make logs                        # вывод логов
+docker-compose down или make down
+```
+
+`docker-compose` тоже работает — Makefile автоматически выберет
+доступную утилиту.
 
 # Ссылки
  1. https://clck.ru/3S42yv
