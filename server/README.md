@@ -23,13 +23,31 @@ server/
 └── README.md
 ```
 
-## Запуск (локально)
+## Архитектура
 
-```
+Оркестратор написан на Node.js + Express с использованием TypeScript. Взаимодействие
+с базой осуществляется через Prisma Client, схема данных описана в
+`prisma/schema.prisma`.
+
+API организовано в нескольких модулях:
+
+- `/api/auth` – регистрация, логин;
+- `/api/users` – профиль пользователя (+ администраторский просмотр);
+- `/api/services` – единый каталог сервисов, CRUD для админа;
+- `/api/services/:serviceId/plans` – тарифные планы сервиса;
+- `/api/subscriptions` – создание, просмотр и отмена подписок;
+- `/api/tenants` – информация по развернутым контейнерам;
+- `/api/payments` – история платежей.
+
+Токены JWT подписываются секретом из переменных окружения, роль пользователя
+используется для контроля доступа.
+
+### Запуск (локально)
+
+```bash
 cd server
-# настроить переменные окружения, например скопировать .env.example в .env
-# основной параметр DATABASE_URL должен указывать на Postgres (или sqlite при
-# разработке с небольшими изменениями schemas)
+# скопируйте пример .env в .env и заполните значения
+# DATABASE_PROVIDER может быть sqlite/postgresql
 npm install
 npm run dev            # в режиме разработки
 npm run build && npm start  # production
@@ -42,11 +60,29 @@ npm run build && npm start  # production
 ```bash
 # если используется PostgreSQL и DATABASE_URL настроен
 npx prisma migrate deploy
-# (или) npx prisma db push --preview-feature
+# (или) npx prisma db push
 ```
 
-Для локального простого прототипа можно временно изменить схему Prisma на
-`provider = "sqlite"` и задать `DATABASE_URL="file:./dev.db"`.
+Для локального простого прототипа можно временно поменять провайдера на
+`sqlite` и задать `DATABASE_URL="file:./dev.db"`.
+
+### Тесты
+
+Запускаются jest + supertest: `npm test`.
+
+### Админ
+
+Создайте первого администратора командой:
+
+```bash
+npm run seed -- admin@example.com password
+```
+
+### Развёртывание на сервере
+
+1. Соберите TypeScript: `npm run build`.
+2. Запустите `npm start` или используйте Docker/PM2.
+3. Убедитесь, что переменные окружения заданы (Postgres, JWT_SECRET и т.п.).
 
 
 ## Тесты

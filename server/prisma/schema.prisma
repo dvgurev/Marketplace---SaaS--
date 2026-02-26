@@ -1,5 +1,6 @@
 // Prisma schema for Marketplace SaaS platform
 // Mirrors the PostgreSQL tables defined in the project README
+// Universal configuration for all platforms (Windows, Linux, macOS)
 
 datasource db {
   // provider can be overridden by setting DATABASE_PROVIDER env var (sqlite or postgresql)
@@ -9,6 +10,8 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  // Универсальная конфигурация для всех платформ
+  binaryTargets = ["native", "windows", "linux-musl", "debian-openssl-1.1.x", "debian-openssl-1.0.x", "darwin", "darwin-arm64"]
 }
 
 model User {
