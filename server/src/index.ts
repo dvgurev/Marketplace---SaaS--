@@ -1,5 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import authRoutes from './routes/auth';
+import userRoutes from './routes/users';
+import serviceRoutes from './routes/services';
+import { PORT } from './config';
 
 dotenv.config();
 
@@ -10,7 +14,12 @@ app.get('/health', (req, res) => {
   res.send('OK');
 });
 
-const port = process.env.PORT || 5000;
+// mount routers
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/services', serviceRoutes);
+
+const port = PORT;
 app.listen(port, () => {
   console.log(`Orchestrator running on port ${port}`);
 });
